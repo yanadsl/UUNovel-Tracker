@@ -1,3 +1,8 @@
+##必備清單
+BeautifulSoup4
+
+EasyGUI
+
 ##使用說明
 將檔案下載後放在同一資料夾，修改`config.txt`設定後即可
 
