@@ -84,7 +84,7 @@ def search(Filiter,NovelName,NovelSite,LastChapter):
 
     # use contents to get only the content inside without <a>/</a> tag
     # check if there's a new chapter
-    if a.contents[0] == LastChapter:
+    if a.contents[0] != LastChapter:
         LastChapter = a.contents[0]
         Novel = urllib2.urlopen(BaseSite + a.get('href'))
         content = Novel.read().decode('gbk')
