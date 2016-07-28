@@ -4,6 +4,9 @@ BeautifulSoup4
 EasyGUI
 
 ##使用說明
+
+只能用在www.uukanshu.com
+
 將檔案下載後放在同一資料夾，修改`config.txt`設定後即可
 
 若有發現新章節會跳出視窗告知，下載好的檔案在同一資料夾底下
