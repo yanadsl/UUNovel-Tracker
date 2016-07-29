@@ -124,7 +124,7 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
 # Main Entry Point
 try:
     flag = 0
-    f = open("config.tt", "r+")
+    f = open("config.txt", "r+")
     fread = f.read()
     print fread
     a = fread.split("\"")
@@ -175,7 +175,7 @@ except:
                 errmsg += '"%s" 不能為空.\n' % fieldNames[i]
         if errmsg == "": break  # no problems found
         fieldValues = easygui.multenterbox(msg+"\n"+errmsg, title, fieldNames, fieldValues)
-    with open("test.txt", "w") as f:
+    with open("config.txt", "w") as f:
         f.write("\"Filiter:" + fieldValues[0] + "\"\n"
                 "\"NovelName:" + fieldValues[1] + "\"\n"
                 "\"NovelSite:" + fieldValues[2] + "\"\n"
