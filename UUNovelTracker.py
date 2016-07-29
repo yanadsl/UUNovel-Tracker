@@ -72,7 +72,7 @@ def str_full_to_half(textLine):
     return myTextLine
 
 
-def search(Filiter, NovelName, NovelSite, LastChapter, IndexFile):
+def search(Filiter, NovelName, NovelSite, LastChapter):
     BaseSite = "http://www.uukanshu.com"
     menu = urllib2.urlopen(BaseSite + NovelSite)
     content = menu.read().decode('gbk')
@@ -121,10 +121,10 @@ def search(Filiter, NovelName, NovelSite, LastChapter, IndexFile):
     else:
         print "nothing"
 
-
+# Main Entry Point
 try:
     flag = 0
-    f = open("config.txt", "r+")
+    f = open("config.tt", "r+")
     fread = f.read()
     print fread
     a = fread.split("\"")
@@ -153,5 +153,31 @@ try:
             easygui.msgbox("設定檔寫入有問題", "QQ請找作者回報")
 
 except:
-    easygui.msgbox("設定檔有問題喔", "你是不想看小說逆")
-    os.system('')
+    msg = "設定檔有問題喔，按下確認重新建立"
+    title = "UUNovel-Tracker"
+    if easygui.ynbox(msg, title, choices=("是", "否")):  # show a Continue/Cancel dialog
+        pass  # user chose Continue
+    else:  # user chose Cancel
+        sys.exit(0)
+
+    msg = "首次小說設定"
+    title = "UUNovel-Tracker"
+    fieldNames = ["過濾字串", "小說名稱", "小說網址", "上個章節名"]
+    fieldValues = ["UU看书（ www.uukanshu.com ),ex1,ex2",
+                   "全职法师", "/b/29676", "第一千一百四十九章 1念万钧，群链"]  # we start with blanks for the values
+    fieldValues = easygui.multenterbox(msg, title, fieldNames, fieldValues)
+    # make sure that none of the fields was left blank
+    while 1:
+        if fieldValues is None: break
+        errmsg = ""
+        for i in range(len(fieldNames)):
+            if fieldValues[i].strip() == "":
+                errmsg += '"%s" 不能為空.\n' % fieldNames[i]
+        if errmsg == "": break  # no problems found
+        fieldValues = easygui.multenterbox(msg+"\n"+errmsg, title, fieldNames, fieldValues)
+    with open("test.txt", "w") as f:
+        f.write("\"Filiter:" + fieldValues[0] + "\"\n"
+                "\"NovelName:" + fieldValues[1] + "\"\n"
+                "\"NovelSite:" + fieldValues[2] + "\"\n"
+                "\"LastChapter:" + fieldValues[3] + "\"")
+    print "Reply was:", fieldValues
