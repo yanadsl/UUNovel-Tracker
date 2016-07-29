@@ -6,8 +6,10 @@ import os
 
 # making everything utf-8 in case of encoding error
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
 
 # 全/半形轉換
 def str_full_to_half(textLine):
@@ -69,7 +71,8 @@ def str_full_to_half(textLine):
     myTextLine = myTextLine.replace("．", ".")
     return myTextLine
 
-def search(Filiter,NovelName,NovelSite,LastChapter):
+
+def search(Filiter, NovelName, NovelSite, LastChapter, IndexFile):
     BaseSite = "http://www.uukanshu.com"
     menu = urllib2.urlopen(BaseSite + NovelSite)
     content = menu.read().decode('gbk')
@@ -103,7 +106,7 @@ def search(Filiter,NovelName,NovelSite,LastChapter):
         for name in Filiter:
             s = s.replace(name, "")
         try:
-            with open(LastChapter+ ".txt", 'w+') as f:
+            with open(LastChapter + ".txt", 'w+') as f:
                 f.write(s)
                 easygui.msgbox(NovelName + "更新啦！\n" + LastChapter, "就跟你說去看小說啦")
                 """
@@ -112,16 +115,19 @@ def search(Filiter,NovelName,NovelSite,LastChapter):
                 except:
                     print "無法開啟下載檔案"
                 """
+                return LastChapter
         except:
-            print "無法建造檔案"
+            easygui.msgbox("無法建造檔案", "QQ請找作者回報")
     else:
         print "nothing"
 
 
-
-
 try:
-    a = open("config.txt", "r+").read().split("\"")
+    flag = 0
+    f = open("config.txt", "r+")
+    fread = f.read()
+    print fread
+    a = fread.split("\"")
     quantity = (len(a) - 2) / 6
     print "一共" + str(quantity) + "本書要找"
     for things in a:
@@ -134,9 +140,18 @@ try:
             NovelSite = things[10:]
         if not things.find("LastChapter"):
             LastChapter = things[12:]
-            search(Filiter, NovelName, NovelSite, LastChapter)
+            NewChapter = search(Filiter, NovelName, NovelSite, LastChapter, a)
+            if NewChapter is not None:
+                flag = 1
+                fread = fread.replace(LastChapter, NewChapter)
+    f.close()
+    if flag:
+        try:
+            with open("config.txt", "w") as f:
+                f.write(fread)
+        except:
+            easygui.msgbox("設定檔寫入有問題", "QQ請找作者回報")
+
 except:
-    easygui.msgbox("設定檔有問題喔" , "你是不想看小說逆")
+    easygui.msgbox("設定檔有問題喔", "你是不想看小說逆")
     os.system('')
-
-
