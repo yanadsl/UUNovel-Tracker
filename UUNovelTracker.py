@@ -106,15 +106,18 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
         for name in Filiter:
             s = s.replace(name, "")
         try:
-            with open(LastChapter + ".txt", 'w+') as f:
+            # get desktop path
+            # from   http://wiki.alarmchang.com/index.php?title=Python_使用環境變數讀取Desktop_桌面路徑
+            desktop = os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"], "Desktop")
+            FileName = (LastChapter.replace(" ", "") + ".txt").encode().decode()
+            with open(desktop+FileName, 'w') as f:
                 f.write(s)
                 easygui.msgbox(NovelName + "更新啦！\n" + LastChapter, "就跟你說去看小說啦")
-                """
+                # openfile
                 try:
-                    os.system(LastChapter + ".txt")
+                    os.startfile(desktop + FileName)
                 except:
-                    print "無法開啟下載檔案"
-                """
+                    easygui.msgbox("無法開啟下載檔案", "QQ請找作者回報")
                 return LastChapter
         except:
             easygui.msgbox("無法建造檔案", "QQ請找作者回報")
@@ -124,7 +127,7 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
 # Main Entry Point
 try:
     flag = 0
-    f = open("config.txt", "r+")
+    f = open("config.txt", "r")
     fread = f.read()
     print fread
     a = fread.split("\"")
@@ -140,11 +143,12 @@ try:
             NovelSite = things[10:]
         if not things.find("LastChapter"):
             LastChapter = things[12:]
-            NewChapter = search(Filiter, NovelName, NovelSite, LastChapter, a)
+            NewChapter = search(Filiter, NovelName, NovelSite, LastChapter)
             if NewChapter is not None:
                 flag = 1
                 fread = fread.replace(LastChapter, NewChapter)
     f.close()
+    # update config
     if flag:
         try:
             with open("config.txt", "w") as f:
@@ -164,8 +168,9 @@ except:
     title = "UUNovel-Tracker"
     fieldNames = ["過濾字串", "小說名稱", "小說網址", "上個章節名"]
     fieldValues = ["UU看书（ www.uukanshu.com ),ex1,ex2",
-                   "全职法师", "/b/29676", "第一千一百四十九章 1念万钧，群链"]  # we start with blanks for the values
+                   "全职法师", "/b/29676", "第一千一百四十九章 1念万钧，群链"]  # initial values
     fieldValues = easygui.multenterbox(msg, title, fieldNames, fieldValues)
+
     # make sure that none of the fields was left blank
     while 1:
         if fieldValues is None: break
