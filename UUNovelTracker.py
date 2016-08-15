@@ -96,7 +96,7 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
             except:
                 easygui.msgbox("無法建造檔案", "QQ請找作者回報")
 
-        Thread(target=showmsg, args=(NovelName + "更新啦！\n" + '\n'.join(ChapterNameList), u"就跟你說去看小說啦")).start()
+        #Thread(target=showmsg, args=(NovelName + "更新啦！\n" + '\n'.join(ChapterNameList), u"就跟你說去看小說啦")).start()
         #easygui.msgbox(NovelName + "更新啦！\n" + '\n'.join(ChapterNameList), "就跟你說去看小說啦")
         # openfile
         # 先開的視窗(舊章節)會被蓋在下面，故用reverse
