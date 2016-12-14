@@ -37,7 +37,6 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
     content = menu.read().decode('gbk')
 
     # get things into Beautifulsoup
-    # since what i need is on the top of the site , only input 1/4 into it
     soup = BeautifulSoup(content, "html.parser")
 
     # find <a> tag(.a) from <div> tag with name "zuixin"(find_all) and find 1 result
@@ -71,7 +70,8 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
 
             soup = BeautifulSoup(content, "html.parser")
             # delete div "ad_content"
-            soup.find_all("div", "ad_content", limit=1)[0].extract()
+            for ad_div in soup.find_all("div", "ad_content"):
+                ad_div.extract()
             contentbox = soup.find_all("div", "contentbox", limit=1)[0].div.contents
             title = soup.html.head.title.contents[0].replace("_UU看书", "")
             s = title
