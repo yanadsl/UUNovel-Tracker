@@ -1,7 +1,11 @@
 ##必備清單
-python 2.7
+python 3.5
+
+requests(encoding problems free)
 
 BeautifulSoup4
+
+html5lib
 
 EasyGUI
 
@@ -11,7 +15,7 @@ EasyGUI
 
 僅需下載.py檔即可，第一次執行會有指引config檔設定
 
-若有發現新章節會跳出視窗告知，並直接開啟檔案，下載好的檔案在桌面
+若有發現新章節會直接開啟檔案，下載好的檔案在桌面
 
 文章內容的空格(非空行)會被去除，全形文字/符號會轉成半形，方便過濾文字
 
