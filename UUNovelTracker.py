@@ -13,11 +13,9 @@ dict = {"Ａ": "A", "Ｂ": "B", "Ｃ": "C", "Ｄ": "D", "Ｅ": "E", "Ｆ": "F", 
 
 
 def str_full_to_half(textLine):
-    key = dict.keys()
-    value = dict.values()
     newTextLine = textLine
-    for alphabet in range(0, 54):
-        newTextLine = newTextLine.replace(key[alphabet], value[alphabet])
+    for key, value in dict.items():
+        newTextLine = newTextLine.replace(key, value)
     return newTextLine
 
 
@@ -26,11 +24,11 @@ def receive_url_data(site, timeout=10):
         menu = requests.get(site, timeout=timeout)
         return menu.text
     except requests.ConnectionError:
-        easygui.msgbox('connection refuse or DNS error', "網路有問題")
+        easygui.msgbox("網路有問題", 'connection refuse or DNS error')
     except requests.HTTPError:
-        easygui.msgbox('HTTP error', "網路有問題")
+        easygui.msgbox("網路有問題", 'HTTP error')
     except requests.Timeout:
-        easygui.msgbox('Time out', "網路有問題")
+        easygui.msgbox("網路有問題", 'Time out')
     input('Press Enter to exit')
     sys.exit(0)
 
@@ -53,18 +51,18 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
         # 抓取清單，反轉，pop掉第一個(第一章)
         # 當抓到與上一個章節相同名稱後 find_flag = 1
         # 紀錄後面章節的url
-        a_chaptername = soup.find_all("div", "zhangjie clear", limit=1)[0].find_all("a")
-        a_chaptername.reverse()
-        a_chaptername.pop()
+        a_chapter_name = soup.find_all("div", "zhangjie clear", limit=1)[0].find_all("a")
+        a_chapter_name.reverse()
+        a_chapter_name.pop()
         find_flag = 0
         NewChapterUrlList = []
-        for s in range(0, len(a)):
+        for s in range(0, len(a_chapter_name)):
             if not find_flag:
-                if a_chaptername[s].contents[0] == LastChapter:
+                if a_chapter_name[s].contents[0] == LastChapter:
                     find_flag = 1
             else:
-                LastChapter = a_chaptername[s].contents[0]
-                NewChapterUrlList.append(a_chaptername[s].get('href'))
+                LastChapter = a_chapter_name[s].contents[0]
+                NewChapterUrlList.append(a_chapter_name[s].get('href'))
 
         # 開啟內容頁面
         ChapterNameList = []
@@ -79,7 +77,7 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
             title = soup.html.head.title.contents[0].replace("_UU看书", "")
             s = title
             for text in contentbox:
-                tmp = str(text).encode()
+                tmp = str(text)
                 if tmp != "<br/>":
                     if tmp.find('flag'):
                         s += (tmp + '\n')
@@ -92,8 +90,8 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
             # from   http://wiki.alarmchang.com/index.php?title=Python_使用環境變數讀取Desktop_桌面路徑
             desktop = os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"], "Desktop")
             try:
-                FileName = (title.replace(" ", "") + ".txt").encode().decode()
-                with open(desktop + "\\" + FileName, 'w') as f:
+                FileName = (title.replace(" ", "") + ".txt")
+                with open(desktop + "\\" + FileName, 'w', encoding='utf8') as f:
                     f.write(s)
                     ChapterNameList.append(title)
             except IOError:
@@ -107,7 +105,7 @@ def search(Filiter, NovelName, NovelSite, LastChapter):
         desktop = os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"], "Desktop")
         for name in ChapterNameList:
             try:
-                os.startfile((desktop + "\\" + name.replace(" ", "") + ".txt").encode().decode())
+                os.startfile((desktop + "\\" + name.replace(" ", "") + ".txt"))
             except IOError:
                 easygui.msgbox("無法開啟下載檔案", "QQ請找作者回報")
                 sys.exit(0)
@@ -142,7 +140,7 @@ try:
     # update config
     if flag:
         try:
-            with open("config.txt", "w") as f:
+            with open("config.txt", "w", encoding='utf8') as f:
                 f.write(fread)
         except IOError:
             easygui.msgbox("設定檔寫入有問題", "QQ請找作者回報")
@@ -173,7 +171,7 @@ except IOError:
         if errmsg == "":
             break  # no problems found
         fieldValues = easygui.multenterbox(msg + "\n" + errmsg, title, fieldNames, fieldValues)
-    with open("config.txt", "w") as f:
+    with open("config.txt", "w", encoding='utf8') as f:
         f.write("\"Filiter:" + fieldValues[0] + "\"\n"
                 "\"NovelName:" + fieldValues[1] + "\"\n"
                 "\"NovelSite:" + fieldValues[2] + "\"\n"
